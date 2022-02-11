@@ -189,11 +189,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
       - name: Update Wiki
-        continue-on-error: true
         run: ./util/update_wiki.sh artifacts ${{ steps.create_release.outputs.tag_name }}
         env:
           GITHUB_TOKEN: ${{ github.token }}
       - name: Prune old releases
+        continue-on-error: true
         run: ./util/prunetags.sh
         env:
           GITHUB_TOKEN: ${{ github.token }}
