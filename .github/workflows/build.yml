@@ -6,13 +6,15 @@ on:
     paths-ignore:
       - '**.md'
       - 'LICENSE'
-  repository_dispatch:
-    types: [build]
   workflow_dispatch:
-    branches:
-      - master
-  # schedule:
-  #   - cron: '0 12 * * *'
+    inputs:
+      doRelease:
+        description: 'Publish new release'
+        type: boolean
+        default: false
+        required: false
+  schedule:
+    - cron: '0 12 * * *'
 
 env:
   DOCKER_BUILDKIT: 1
@@ -152,7 +154,11 @@ jobs:
           path: artifacts/*
   publish_release:
     name: Publish release
+<<<<<<< HEAD
     # if: github.event_name != 'push'
+=======
+    if: ${{ github.event_name == 'schedule' || github.event.inputs.doRelease == 'true' }}
+>>>>>>> BtbN/master
     needs: build_ffmpeg
     runs-on: ubuntu-latest
     steps:
