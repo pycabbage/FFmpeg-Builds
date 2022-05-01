@@ -1,7 +1,7 @@
 #!/bin/bash
 
 RUBBERBAND_REPO="https://github.com/breakfastquay/rubberband.git"
-RUBBERBAND_COMMIT="3a6d8a8c762dc903b5951ca015e09db4940965de"
+RUBBERBAND_COMMIT="95371b882b01af86132d17be739de82d2fadf6d7"
 
 ffbuild_enabled() {
     [[ $VARIANT == lgpl* ]] && return -1
@@ -16,7 +16,7 @@ ffbuild_dockerbuild() {
 
     local myconf=(
         --prefix="$FFBUILD_PREFIX"
-        -Dno_shared=true
+        -Ddefault_library=static
     )
 
     if [[ $TARGET == win* || $TARGET == linux* ]]; then

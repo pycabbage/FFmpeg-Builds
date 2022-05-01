@@ -1,15 +1,17 @@
 #!/bin/bash
 
-HARFBUZZ_REPO="https://github.com/harfbuzz/harfbuzz.git"
-HARFBUZZ_COMMIT="6695bf056065f2e2e56c0e00b9740e6685a8af28"
+LIBPNG_REPO="https://github.com/glennrp/libpng.git"
+LIBPNG_COMMIT="a37d4836519517bdce6cb9d956092321eca3e73b"
 
 ffbuild_enabled() {
     return 0
 }
 
 ffbuild_dockerbuild() {
-    git-mini-clone "$HARFBUZZ_REPO" "$HARFBUZZ_COMMIT" harfbuzz
-    cd harfbuzz
+    git-mini-clone "$LIBPNG_REPO" "$LIBPNG_COMMIT" libpng
+    cd libpng
+
+    autoreconf -i
 
     local myconf=(
         --prefix="$FFBUILD_PREFIX"
@@ -27,9 +29,9 @@ ffbuild_dockerbuild() {
         return -1
     fi
 
-    export LIBS="-lpthread"
+    export CPPFLAGS="$CPPFLAGS -I$FFBUILD_PREFIX/include"
 
-    ./autogen.sh "${myconf[@]}"
+    ./configure "${myconf[@]}"
     make -j$(nproc)
     make install
 }

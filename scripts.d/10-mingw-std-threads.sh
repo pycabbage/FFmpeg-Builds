@@ -1,7 +1,7 @@
 #!/bin/bash
 
 MINGW_STD_THREADS_REPO="https://github.com/meganz/mingw-std-threads.git"
-MINGW_STD_THREADS_COMMIT="f73afbe664bf3beb93a01274246de80d543adf6e"
+MINGW_STD_THREADS_COMMIT="6c2061b7da41d6aa1b2162ff4383ec3ece864bc6"
 
 ffbuild_enabled() {
     [[ $TARGET == win* ]] || return -1
