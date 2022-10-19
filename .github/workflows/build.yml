@@ -17,8 +17,8 @@ on:
         type: boolean
         default: false
         required: false
-  schedule:
-    - cron: '0 12 * * *'
+  # schedule:
+  #   - cron: '0 12 * * *'
 
 env:
   DOCKER_BUILDKIT: 1
@@ -100,7 +100,7 @@ jobs:
       fail-fast: false
       matrix:
         target: [win64,linux64,linuxarm64]
-        variant: [gpl,lgpl,gpl 4.4,gpl 5.1,lgpl 4.4,lgpl 5.1,gpl-shared,lgpl-shared,gpl-shared 4.4,gpl-shared 5.1,lgpl-shared 4.4,lgpl-shared 5.1]
+        variant: [gpl,lgpl,nonfree,gpl 4.4,gpl 5.1,lgpl 4.4,lgpl 5.1,nonfree 4.4,nonfree 5.1,gpl-shared,lgpl-shared,nonfree-shared,gpl-shared 4.4,gpl-shared 5.1,lgpl-shared 4.4,lgpl-shared 5.1,nonfree-shared 4.4,nonfree-shared 5.1]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -144,7 +144,7 @@ jobs:
       fail-fast: false
       matrix:
         target: [win64,linux64,linuxarm64]
-        variant: [gpl,lgpl,gpl 4.4,gpl 5.1,lgpl 4.4,lgpl 5.1,gpl-shared,lgpl-shared,gpl-shared 4.4,gpl-shared 5.1,lgpl-shared 4.4,lgpl-shared 5.1]
+        variant: [gpl,lgpl,nonfree,gpl 4.4,gpl 5.1,lgpl 4.4,lgpl 5.1,nonfree 4.4,nonfree 5.1,gpl-shared,lgpl-shared,nonfree-shared,gpl-shared 4.4,gpl-shared 5.1,lgpl-shared 4.4,lgpl-shared 5.1,nonfree-shared 4.4,nonfree-shared 5.1]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -208,6 +208,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
       - name: Prune old releases
+        continue-on-error: true
         run: ./util/prunetags.sh
         env:
           GITHUB_TOKEN: ${{ github.token }}
