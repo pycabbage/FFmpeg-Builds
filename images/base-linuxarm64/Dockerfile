@@ -3,6 +3,7 @@ FROM $GH_REPO/base:latest
 
 RUN --mount=src=ct-ng-config,dst=/.config \
     git clone --filter=blob:none -b crosstool-ng-1.25.0 https://github.com/crosstool-ng/crosstool-ng.git /ct-ng && cd /ct-ng && \
+    sed -i -E 's/https:\/\/www\.zlib\.net\//https:\/\/www.zlib.net\/ https:\/\/www.zlib.net\/fossils\//g' packages\zlib\package.desc && \
     ./bootstrap && \
     ./configure --enable-local && \
     make -j$(nproc) && \
