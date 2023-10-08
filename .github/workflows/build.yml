@@ -252,7 +252,7 @@ jobs:
           path: artifacts/*
   publish_release:
     name: Publish release
-    if: ${{ !cancelled() && ( github.event_name == 'schedule' || github.event.inputs.doRelease == 'true' ) && needs.build_ffmpeg.result == 'success' }}
+    if: ${{ !cancelled() && ( github.event_name == 'push' || github.event_name == 'schedule' || github.event.inputs.doRelease == 'true' ) && needs.build_ffmpeg.result == 'success' }}
     needs: build_ffmpeg
     runs-on: ubuntu-latest
     steps:
@@ -271,7 +271,8 @@ jobs:
           RELDATE="$(date +'%Y-%m-%d %H:%M')"
           NAME="Auto-Build $RELDATE"
           TAGNAME="autobuild-$(date +'%Y-%m-%d-%H-%M')"
-          hub release create $(for a in artifacts/*.{zip,tar.xz}; do echo -a $a; done) -m "$NAME" -t "master" "$TAGNAME"
+          # hub release create $(for a in artifacts/*.{zip,tar.xz}; do echo -a $a; done) -m "$NAME" -t "master" "$TAGNAME"
+          gh release create "$TAGNAME" $(for a in artifacts/*.{zip,tar.xz}; do echo $a; done) -t "$NAME" --target "master"
           echo "tag_name=${TAGNAME}" >> $GITHUB_OUTPUT
           echo "rel_date=${RELDATE}" >> $GITHUB_OUTPUT
         env:
@@ -284,10 +285,12 @@ jobs:
           ./util/repack_latest.sh latest_artifacts artifacts/*.{zip,tar.xz}
           NAME="Latest Auto-Build (${{ steps.create_release.outputs.rel_date }})"
           TAGNAME="latest"
-          hub release delete "$TAGNAME" || true
+          # hub release delete "$TAGNAME" || true
+          gh release delete "$TAGNAME" -y || true
           git push --delete origin "$TAGNAME" || true
           sleep 15
-          hub release create $(for a in latest_artifacts/*; do echo -a $a; done) -m "$NAME" -t "master" "$TAGNAME"
+          # hub release create $(for a in latest_artifacts/*; do echo -a $a; done) -m "$NAME" -t "master" "$TAGNAME"
+          gh release create "$TAGNAME" $(for a in latest_artifacts/*; do echo $a; done) -t "$NAME" --target "master"
         env:
           GITHUB_TOKEN: ${{ github.token }}
       - name: Update Wiki
