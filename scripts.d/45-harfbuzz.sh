@@ -1,15 +1,13 @@
 #!/bin/bash
 
 SCRIPT_REPO="https://github.com/harfbuzz/harfbuzz.git"
-SCRIPT_COMMIT="d7c4fdfaa2ed5e44dc5c01cd30c0ddc19ff78fdf"
+SCRIPT_COMMIT="63973005bc07aba599b47fdd4cf788647b601ccd"
 
 ffbuild_enabled() {
     return 0
 }
 
 ffbuild_dockerbuild() {
-    cd "$FFBUILD_DLDIR/$SELF"
-
     local myconf=(
         --prefix="$FFBUILD_PREFIX"
         --disable-shared
@@ -31,6 +29,8 @@ ffbuild_dockerbuild() {
     ./autogen.sh "${myconf[@]}"
     make -j$(nproc)
     make install
+
+    echo "Libs.private: -lpthread" >> "$FFBUILD_PREFIX"/lib/pkgconfig/harfbuzz.pc
 }
 
 ffbuild_configure() {

@@ -8,8 +8,6 @@ ffbuild_enabled() {
 }
 
 ffbuild_dockerbuild() {
-    cd "$FFBUILD_DLDIR/$SELF"
-
     mkdir build && cd build
 
     local myconf=(
@@ -40,11 +38,6 @@ ffbuild_dockerbuild() {
     meson "${myconf[@]}" ..
     ninja -j"$(nproc)"
     ninja install
-
-    if [[ $TARGET == win* ]]; then
-        # This works around mbedtls not having pkg-config, while recently having added a new dependency.
-        echo "Libs.private: -lbcrypt -lws2_32" >> "$FFBUILD_PREFIX"/lib/pkgconfig/librist.pc
-    fi
 }
 
 ffbuild_configure() {

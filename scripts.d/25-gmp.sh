@@ -1,15 +1,13 @@
 #!/bin/bash
 
 SCRIPT_REPO="https://github.com/BtbN/gmplib.git"
-SCRIPT_COMMIT="9dff3be5f5bd1f417a81a482bb59f4b25c33cc8a"
+SCRIPT_COMMIT="b686327d7de364f7722cabe4e890b5a6b0ca1e1b"
 
 ffbuild_enabled() {
     return 0
 }
 
 ffbuild_dockerbuild() {
-    cd "$FFBUILD_DLDIR/$SELF"
-
     ./.bootstrap
 
     local myconf=(
