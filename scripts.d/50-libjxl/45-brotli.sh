@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SCRIPT_REPO="https://github.com/google/brotli.git"
-SCRIPT_COMMIT="9351fa7ffb9d5aa133dc8f8b14e175cace52d9e4"
+SCRIPT_COMMIT="39bcecf4559f9b0e75c6248a75d9c0db6b123d88"
 
 ffbuild_enabled() {
     return 0
