@@ -17,8 +17,8 @@ on:
         type: boolean
         default: false
         required: false
-  schedule:
-    - cron: '0 12 * * *'
+  # schedule:
+  #   - cron: '0 12 * * *'
 
 env:
   DOCKER_BUILDKIT: 1
@@ -27,7 +27,7 @@ jobs:
   pre_check:
     name: Pre Checks
     if: ${{ github.event.inputs.buildOnly != 'true' }}
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Repo Check
         if: ${{ false }}
@@ -43,7 +43,7 @@ jobs:
     name: Build base image
     if: ${{ github.event.inputs.buildOnly != 'true' }}
     needs: pre_check
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Free Disk-Space
         run: df -h && sudo apt-get clean && docker system prune -a -f && sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc && df -h
@@ -107,7 +107,7 @@ jobs:
     name: Build target base image
     if: ${{ github.event.inputs.buildOnly != 'true' }}
     needs: build_base
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     strategy:
       fail-fast: false
       matrix:
@@ -162,7 +162,7 @@ jobs:
     name: Build target-variant image
     if: ${{ github.event.inputs.buildOnly != 'true' }}
     needs: build_target_bases
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     strategy:
       fail-fast: false
       matrix:
@@ -251,7 +251,7 @@ jobs:
     name: Build ffmpeg
     if: ${{ ( github.event.inputs.buildOnly == 'true' && !cancelled() ) || success() }}
     needs: build_targets
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     strategy:
       fail-fast: false
       matrix:
@@ -311,7 +311,7 @@ jobs:
     name: Publish release
     if: ${{ !cancelled() && ( github.event_name == 'schedule' || github.event.inputs.doRelease == 'true' ) && needs.build_ffmpeg.result == 'success' }}
     needs: build_ffmpeg
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Free Disk-Space
         run: df -h && sudo apt-get clean && docker system prune -a -f && sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc && df -h
