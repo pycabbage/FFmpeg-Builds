@@ -1,12 +1,15 @@
 #!/bin/bash
 
 SCRIPT_REPO="https://github.com/fraunhoferhhi/vvenc.git"
-SCRIPT_COMMIT="7cf1e5ffc5aeb33b81fa9401df9fd53ef1dae6d1"
+SCRIPT_COMMIT="70a690eaaf00da22b76c90a107b912931f47b9f6"
 
 ffbuild_enabled() {
     [[ $TARGET != *32 ]] || return -1
     (( $(ffbuild_ffver) > 700 )) || return -1
-    return 0
+    # vvenc force-enabled avx2 and equivalent compiler options, and uses a static initializer that promptly
+    # runs such instructions. Making resulting binaries malfunction on any but the very latest CPUs.
+    # Until upstream fixes this behaviour, force-disable vvenc.
+    return -1
 }
 
 ffbuild_dockerbuild() {
